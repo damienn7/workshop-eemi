@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
+import { Role } from '../enums/Role';
 
 interface JwtPayload {
   id: number;
-  role: string;
+  role: Role;
+  institutionId?: number; // absent pour SUPER_ADMIN
   iat: number;
   exp: number;
 }
@@ -16,36 +18,33 @@ export const authMiddleware = (
 ) => {
   const authHeader = req.headers.authorization;
 
-  // 1️⃣ Vérifier la présence du header
   if (!authHeader) {
-    return res.status(401).json({
-      message: 'Authorization header missing',
-    });
+    return res.status(401).json({ message: 'Authorization header missing' });
   }
 
-  // 2️⃣ Vérifier le format Bearer
   const [scheme, token] = authHeader.split(' ');
 
   if (scheme !== 'Bearer' || !token) {
-    return res.status(401).json({
-      message: 'Invalid authorization format',
-    });
+    return res.status(401).json({ message: 'Invalid authorization format' });
   }
 
   try {
-    // 3️⃣ Vérifier le token
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
 
-    // 4️⃣ Attacher l'utilisateur à la requête
+    // 🔐 Sécurité minimale
+    if (!decoded.id || !decoded.role) {
+      return res.status(401).json({ message: 'Invalid token payload' });
+    }
+
+    // 🎯 Attacher le contexte utilisateur
     req.user = {
       id: decoded.id,
       role: decoded.role,
+      institutionId: decoded.institutionId ?? null,
     };
 
     next();
   } catch {
-    return res.status(401).json({
-      message: 'Invalid or expired token',
-    });
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

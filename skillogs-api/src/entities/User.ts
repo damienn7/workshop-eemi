@@ -47,8 +47,9 @@ export class User {
 
   /* Relations */
 
-  @ManyToOne(() => Institution, (institution) => institution.users)
-  institution!: Institution;
+@ManyToOne(() => Institution, { nullable: true })
+institution!: Institution | null;
+
 
   @OneToMany(() => RegistrationRequest, (req) => req.user)
   registration_requests!: RegistrationRequest[];

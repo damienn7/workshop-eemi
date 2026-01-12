@@ -6,23 +6,24 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from './User';
-import { Formation } from './Formation';
+import { Training } from './Training';
 
 @Entity()
-export class Inscription {
+export class Enrollment {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column('float')
-  progression!: number;
+  progress!: number;
 
   @CreateDateColumn()
-  dateInscription!: Date;
+  enrolled_at!: Date;
 
   // Relations
-  @ManyToOne(() => User, (user) => user.inscriptions)
+
+  @ManyToOne(() => User, (user) => user.enrollments)
   user!: User;
 
-  @ManyToOne(() => Formation, (formation) => formation.inscriptions)
-  formation!: Formation;
+  @ManyToOne(() => Training, (training) => training.enrollments)
+  training!: Training;
 }

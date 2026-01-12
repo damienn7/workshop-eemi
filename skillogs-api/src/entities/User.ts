@@ -6,72 +6,59 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { UserRole } from '../enums/UserRole';
+import { Institution } from './Institution';
+import { RegistrationRequest } from './RegistrationRequest';
+import { Training } from './Training';
+import { Enrollment } from './Enrollment';
+import { Resource } from './Resource';
+
+import { Role } from '../enums/Role';
+
 import { AccountStatus } from '../enums/AccountStatus';
-import { Etablissement } from './Etablissement';
-import { Inscription } from './Inscription';
-import { ArticleBlog } from './ArticleBlog';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  /**
-   * Identifiant national (CIN)
-   * → utilisé comme identifiant métier
-   * → PAS clé primaire (bonne pratique)
-   */
-  @Column({ unique: true })
-  cin!: string;
+  @Column({ unique: true, nullable: true })
+  national_id!: string | null;
 
   @Column()
-  prenom!: string;
+  first_name!: string;
 
   @Column()
-  nom!: string;
+  last_name!: string;
 
   @Column({ unique: true })
   email!: string;
 
-  /**
-   * Hash bcrypt
-   */
   @Column()
   password_hash!: string;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.APPRENANT,
-  })
-  role!: UserRole;
+  @Column({ type: 'enum', enum: Role })
+  role!: Role;
 
-  @Column({
-    type: 'enum',
-    enum: AccountStatus,
-    default: AccountStatus.PENDING,
-  })
+  @Column({ type: 'enum', enum: AccountStatus })
   status!: AccountStatus;
 
   @CreateDateColumn()
-  dateCreation!: Date;
+  created_at!: Date;
 
-  /**
-   * Relations
-   */
+  /* Relations */
 
-  // Un utilisateur appartient à un établissement
-  @ManyToOne(() => Etablissement, (etab) => etab.users, {
-    nullable: false,
-  })
-  etablissement!: Etablissement;
+  @ManyToOne(() => Institution, (institution) => institution.users)
+  institution!: Institution;
 
-  // Un utilisateur peut avoir plusieurs inscriptions
-  @OneToMany(() => Inscription, (inscription) => inscription.user)
-  inscriptions!: Inscription[];
+  @OneToMany(() => RegistrationRequest, (req) => req.user)
+  registration_requests!: RegistrationRequest[];
 
-  // Un utilisateur (formateur / admin) peut rédiger des articles
-  @OneToMany(() => ArticleBlog, (article) => article.auteur)
-  articles!: ArticleBlog[];
+  @OneToMany(() => Training, (training) => training.creator)
+  trainings!: Training[];
+
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.user)
+  enrollments!: Enrollment[];
+
+  @OneToMany(() => Resource, (resource) => resource.author)
+  resources!: Resource[];
 }

@@ -1,0 +1,6 @@
+export enum InstitutionType {
+  UNIVERSITY = 'UNIVERSITY',
+  TRAINING_ORGANIZATION = 'TRAINING_ORGANIZATION',
+  CFA = 'CFA',
+  SCHOOL = 'SCHOOL',
+}

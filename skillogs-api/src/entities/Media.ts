@@ -4,13 +4,9 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
-import { Lecon } from './Lecon';
+import { Lesson } from './Lesson';
 
-export enum TypeMedia {
-  VIDEO = 'VIDEO',
-  PDF = 'PDF',
-  IMAGE = 'IMAGE',
-}
+import { MediaType } from '../enums/MediaType';
 
 @Entity()
 export class Media {
@@ -19,21 +15,22 @@ export class Media {
 
   @Column({
     type: 'enum',
-    enum: TypeMedia,
+    enum: MediaType,
   })
-  type!: TypeMedia;
+  type!: MediaType;
 
   @Column()
   url!: string;
 
   /**
-   * Durée en secondes (pour VIDEO)
-   * null pour PDF / IMAGE
+   * Duration in seconds
+   * Only relevant for VIDEO
    */
   @Column({ nullable: true })
-  duree!: number | null;
+  duration!: number | null;
 
   // Relations
-  @ManyToOne(() => Lecon, (lecon) => lecon.medias)
-  lecon!: Lecon;
+
+  @ManyToOne(() => Lesson, (lesson) => lesson.medias)
+  lesson!: Lesson;
 }

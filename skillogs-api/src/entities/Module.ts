@@ -5,8 +5,8 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Formation } from './Formation';
-import { Lecon } from './Lecon';
+import { Training } from './Training';
+import { Lesson } from './Lesson';
 
 @Entity()
 export class Module {
@@ -14,15 +14,16 @@ export class Module {
   id!: number;
 
   @Column()
-  titre!: string;
+  title!: string;
 
   @Column()
-  ordre!: number;
+  order!: number;
 
   // Relations
-  @ManyToOne(() => Formation, (formation) => formation.modules)
-  formation!: Formation;
 
-  @OneToMany(() => Lecon, (lecon) => lecon.module)
-  lecons!: Lecon[];
+  @ManyToOne(() => Training, (training) => training.modules)
+  training!: Training;
+
+  @OneToMany(() => Lesson, (lesson) => lesson.module)
+  lessons!: Lesson[];
 }

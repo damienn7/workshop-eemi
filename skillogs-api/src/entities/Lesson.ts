@@ -8,26 +8,30 @@ import {
 import { Module } from './Module';
 import { Media } from './Media';
 
-import { TypeLecon } from '../enums/TypeLecon';
+import { LessonType } from '../enums/LessonType';
 
 @Entity()
-export class Lecon {
+export class Lesson {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  titre!: string;
+  title!: string;
 
   @Column({
     type: 'enum',
-    enum: TypeLecon,
+    enum: LessonType,
   })
-  type!: TypeLecon;
+  type!: LessonType;
+
+  @Column()
+  order!: number;
 
   // Relations
-  @ManyToOne(() => Module, (module) => module.lecons)
+
+  @ManyToOne(() => Module, (module) => module.lessons)
   module!: Module;
 
-  @OneToMany(() => Media, (media) => media.lecon)
+  @OneToMany(() => Media, (media) => media.lesson)
   medias!: Media[];
 }

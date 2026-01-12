@@ -1,4 +1,4 @@
-export enum TypeLecon {
+export enum LessonType {
   VIDEO = 'VIDEO',
   PDF = 'PDF',
   QUIZ = 'QUIZ',

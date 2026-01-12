@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    /* ======================
+       File Layout
+    ====================== */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* ======================
+       Environment Settings
+    ====================== */
+    "target": "ES2022",
+    "module": "CommonJS",
+    "lib": ["ES2022"],
+    "types": ["node"],
+
+    /* ======================
+       Module Resolution
+    ====================== */
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    /* ======================
+       Decorators (TypeORM)
+    ====================== */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* ======================
+       Output Options
+    ====================== */
+    "sourceMap": true,
+    "declaration": false,
+
+    /* ======================
+       Type Checking
+    ====================== */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* ======================
+       Quality of Life
+    ====================== */
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

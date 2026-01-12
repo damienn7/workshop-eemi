@@ -1,15 +1,19 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { getEnv } from '../utils/env.js';
+import { env } from './env';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  host: getEnv('DB_HOST'),
-  port: Number(getEnv('DB_PORT')),
-  username: getEnv('DB_USER'),
-  password: getEnv('DB_PASSWORD'),
-  database: getEnv('DB_NAME'),
-  synchronize: true,
+
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  database: env.DB_NAME,
+
+  synchronize: true, // ⚠️ false en production
   logging: false,
+
   entities: ['src/entities/**/*.ts'],
+  migrations: ['src/migrations/**/*.ts'],
 });

@@ -8,12 +8,7 @@ import { User } from './User';
 import { Formation } from './Formation';
 import { Temoignage } from './Temoignage';
 
-export enum TypeEtablissement {
-  FACULTE = 'FACULTE',
-  OF = 'OF',
-  CFA = 'CFA',
-  ECOLE = 'ECOLE',
-}
+import { TypeEtablissement } from '../enums/TypeEtablissement';
 
 @Entity()
 export class Etablissement {

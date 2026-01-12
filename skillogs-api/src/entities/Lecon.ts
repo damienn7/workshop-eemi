@@ -8,11 +8,7 @@ import {
 import { Module } from './Module';
 import { Media } from './Media';
 
-export enum TypeLecon {
-  VIDEO = 'VIDEO',
-  PDF = 'PDF',
-  QUIZ = 'QUIZ',
-}
+import { TypeLecon } from '../enums/TypeLecon';
 
 @Entity()
 export class Lecon {

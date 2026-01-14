@@ -1,0 +1,5 @@
+export enum ProfileType {
+  STUDENT = 'STUDENT',
+  EXTERNAL_LEARNER = 'EXTERNAL_LEARNER',
+  INSTRUCTOR = 'INSTRUCTOR',
+}

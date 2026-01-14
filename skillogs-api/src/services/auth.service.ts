@@ -9,6 +9,7 @@ import {
   RegistrationRequest,
 } from '../entities/RegistrationRequest';
 import { generateToken } from '../utils/jwt';
+import { ProfileType } from '../enums/ProfileType';
 
 export class AuthService {
   private userRepo = AppDataSource.getRepository(User);
@@ -54,6 +55,7 @@ export class AuthService {
     last_name: string;
     institution_id: number;
     national_id: string;
+    profile_type: ProfileType;
   }) {
     const exists = await this.userRepo.findOne({
       where: [
@@ -82,7 +84,8 @@ export class AuthService {
       last_name: data.last_name,
       national_id: data.national_id,
       password_hash,
-      role: Role.LEARNER,
+      role: Role.LEARNER,                // sécurité
+      profile_type: data.profile_type,   // métier
       status: AccountStatus.PENDING,
       institution,
     });

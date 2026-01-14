@@ -15,11 +15,15 @@ import { Resource } from './Resource';
 import { Role } from '../enums/Role';
 
 import { AccountStatus } from '../enums/AccountStatus';
+import { ProfileType } from '../enums/ProfileType';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ type: 'enum', enum: ProfileType })
+  profile_type!: ProfileType;
 
   @Column({ type: 'varchar', unique: true, nullable: true })
   national_id!: string | null;

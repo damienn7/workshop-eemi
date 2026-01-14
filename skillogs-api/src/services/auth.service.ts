@@ -53,14 +53,17 @@ export class AuthService {
     first_name: string;
     last_name: string;
     institution_id: number;
-    national_id?: string;
+    national_id: string;
   }) {
     const exists = await this.userRepo.findOne({
-      where: { email: data.email },
+      where: [
+        { email: data.email },
+        { national_id: data.national_id },
+      ],
     });
 
     if (exists) {
-      throw new Error('Email already used');
+      throw new Error('Email or national ID already used');
     }
 
     const institution = await this.institutionRepo.findOneBy({
@@ -77,7 +80,7 @@ export class AuthService {
       email: data.email,
       first_name: data.first_name,
       last_name: data.last_name,
-      national_id: data.national_id ?? null,
+      national_id: data.national_id,
       password_hash,
       role: Role.LEARNER,
       status: AccountStatus.PENDING,

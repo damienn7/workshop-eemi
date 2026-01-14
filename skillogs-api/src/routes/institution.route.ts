@@ -2,12 +2,14 @@ import { Router } from 'express';
 import { InstitutionController } from '../controllers/institution.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { requireRole } from '../middlewares/role.middleware';
-import { validateBody } from '../middlewares/validateBody.middleware';
 import { Role } from '../enums/Role';
 import {
   createInstitutionSchema,
   updateInstitutionSchema,
 } from '../schemas/institution.schema';
+import { InstitutionAdminController } from '../controllers/institution-admin.controller';
+import { createInstitutionAdminSchema } from '../schemas/create-institution-admin.schema';
+import { validateBody } from '../middlewares/validateBody.middleware';
 
 const router = Router();
 
@@ -21,6 +23,15 @@ router.post(
   validateBody(createInstitutionSchema),
   InstitutionController.create
 );
+
+router.post(
+  '/:id/admin',
+  authMiddleware,
+  requireRole(Role.SUPER_ADMIN),
+  validateBody(createInstitutionAdminSchema),
+  InstitutionAdminController.create
+);
+
 
 router.get(
   '/',

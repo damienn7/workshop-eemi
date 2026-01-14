@@ -26,7 +26,7 @@ export class Media {
    * Duration in seconds
    * Only relevant for VIDEO
    */
-  @Column({ nullable: true })
+  @Column({ type: 'int', nullable: true })
   duration!: number | null;
 
   // Relations

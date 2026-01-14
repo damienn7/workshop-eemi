@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import 'dotenv/config';
 
 const envSchema = Joi.object({
   PORT: Joi.number().port().default(3000),
@@ -22,7 +23,7 @@ const { value, error } = envSchema.validate(process.env, {
 if (error) {
   throw new Error(
     `Invalid environment configuration:\n${error.details
-      .map((d) => `- ${d.message}`)
+      .map((d) => `- ${d.message} ${process.env[d.context?.key ?? ''] ? `(got "${process.env[d.context?.key ?? '']}")` : '(not set)'}`)
       .join('\n')}`
   );
 }

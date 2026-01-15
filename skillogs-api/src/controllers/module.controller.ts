@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
-import { TrainingService } from '../services/training.service';
+import { ModuleService } from '../services/module.service';
 
-const trainingService = new TrainingService();
+const moduleService = new ModuleService();
 
-export class TrainingController {
+export class ModuleController {
   static async create(req: Request, res: Response) {
     try {
-      const training = await trainingService.create({
+      const module = await moduleService.create({
         title: req.body.title,
         description: req.body.description,
-        level: req.body.level,
+        order: req.body.order,
+        trainingId: req.body.trainingId,
         institution: req.institution!,
-        creatorId: req.user!.id,
       });
 
-      return res.status(201).json(training);
+      return res.status(201).json(module);
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
@@ -22,10 +22,13 @@ export class TrainingController {
 
   static async findAll(req: Request, res: Response) {
     try {
-      const trainings = await trainingService.findAll(
+      const trainingId = Number(req.params.trainingId);
+      const modules = await moduleService.findAll(
+        trainingId,
         req.institution!
       );
-      return res.json(trainings);
+
+      return res.json(modules);
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
@@ -34,18 +37,18 @@ export class TrainingController {
   static async findOne(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      const training = await trainingService.findOne(
+      const module = await moduleService.findOne(
         id,
         req.institution!
       );
 
-      if (!training) {
+      if (!module) {
         return res.status(404).json({
-          message: 'Training not found',
+          message: 'Module not found',
         });
       }
 
-      return res.json(training);
+      return res.json(module);
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
@@ -54,13 +57,13 @@ export class TrainingController {
   static async update(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      const training = await trainingService.update(
+      const module = await moduleService.update(
         id,
         req.institution!,
         req.body
       );
 
-      return res.json(training);
+      return res.json(module);
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
@@ -69,7 +72,7 @@ export class TrainingController {
   static async delete(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      await trainingService.remove(
+      await moduleService.remove(
         id,
         req.institution!
       );

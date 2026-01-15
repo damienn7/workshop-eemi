@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.routes';
 import institutionRoutes from './routes/institution.routes';
 import { institutionContext } from './middlewares/institutionContext.middleware';
 import trainingRoutes from './routes/training.routes';
+import moduleRoutes from './routes/module.routes';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(institutionContext);
 app.use('/auth', authRoutes);
 app.use('/institutions', institutionRoutes);
 app.use('/trainings', trainingRoutes); // Assuming userRoutes is similar to institutionRoutes
+app.use('/modules', moduleRoutes);
 app.get('/health', (_, res) => {
   res.json({ status: 'ok' });
 });

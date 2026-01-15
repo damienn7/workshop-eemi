@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  Index,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,6 +28,10 @@ export class Training {
 
   @Column({ nullable: true })
   level?: string;
+
+  @Index()
+  @Column({ nullable: true })
+  slug?: string;
 
   @Column({
     type: 'enum',

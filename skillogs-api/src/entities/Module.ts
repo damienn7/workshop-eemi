@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  Index,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,6 +24,10 @@ export class Module {
 
   @Column()
   order!: number;
+
+  @Index()
+  @Column({ nullable: true })
+  slug?: string;
 
   @ManyToOne(() => Training, (training) => training.modules, {
     nullable: false,

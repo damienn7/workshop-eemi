@@ -10,7 +10,6 @@ import {
 } from '../schemas/training.schema';
 
 const router = Router();
-const controller = new TrainingController();
 
 /**
  * Toutes les routes Training sont protégées
@@ -27,20 +26,20 @@ router.post(
   '/',
   requireRole([Role.ADMIN, Role.INSTRUCTOR]),
   validateBody(createTrainingSchema),
-  controller.create
+  TrainingController.create
 );
 
 /**
  * LIST TRAININGS (institution scoped)
  * GET /trainings
  */
-router.get('/', controller.findAll);
+router.get('/', TrainingController.findAll);
 
 /**
  * GET ONE TRAINING
  * GET /trainings/:id
  */
-router.get('/:id', controller.findOne);
+router.get('/:id', TrainingController.findOne);
 
 /**
  * UPDATE TRAINING
@@ -51,7 +50,7 @@ router.put(
   '/:id',
   requireRole([Role.ADMIN, Role.INSTRUCTOR]),
   validateBody(updateTrainingSchema),
-  controller.update
+  TrainingController.update
 );
 
 /**
@@ -62,7 +61,7 @@ router.put(
 router.delete(
   '/:id',
   requireRole([Role.ADMIN, Role.INSTRUCTOR]),
-  controller.remove
+  TrainingController.delete
 );
 
 export default router;

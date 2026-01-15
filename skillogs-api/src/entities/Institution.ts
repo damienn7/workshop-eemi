@@ -23,6 +23,9 @@ export class Institution {
   })
   type!: InstitutionType;
 
+  @Column({ unique: true })
+  slug!: string;
+
   @Column()
   address!: string;
 

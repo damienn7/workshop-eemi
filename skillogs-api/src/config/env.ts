@@ -37,4 +37,5 @@ export const env = value as {
   DB_USER: string;
   DB_PASSWORD: string;
   DB_NAME: string;
+  BASE_DOMAIN: string;
 };

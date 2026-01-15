@@ -9,6 +9,8 @@ declare global {
         role: Role;
         institutionId: number | null;
       };
+
+      institution: Institution | null;
     }
   }
 }

@@ -4,10 +4,15 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 import { Module } from './Module';
 import { Enrollment } from './Enrollment';
+import { Institution } from './Institution';
+
+import { TrainingStatus } from '../enums/TrainingStatus';
 
 @Entity()
 export class Training {
@@ -20,12 +25,24 @@ export class Training {
   @Column('text')
   description!: string;
 
-  @Column()
-  level!: string;
+  @Column({ nullable: true })
+  level?: string;
 
-  // Relations
+  @Column({
+    type: 'enum',
+    enum: TrainingStatus,
+    default: TrainingStatus.DRAFT,
+  })
+  status!: TrainingStatus;
 
-  @ManyToOne(() => User, (user) => user.trainings)
+  /* ======================
+     RELATIONS
+     ====================== */
+
+  @ManyToOne(() => Institution, { nullable: false })
+  institution!: Institution;
+
+  @ManyToOne(() => User, { nullable: false })
   creator!: User;
 
   @OneToMany(() => Module, (module) => module.training)
@@ -33,4 +50,14 @@ export class Training {
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.training)
   enrollments!: Enrollment[];
+
+  /* ======================
+     METADATA
+     ====================== */
+
+  @CreateDateColumn()
+  created_at!: Date;
+
+  @UpdateDateColumn()
+  updated_at!: Date;
 }

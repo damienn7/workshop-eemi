@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Training } from './Training';
 import { Lesson } from './Lesson';
@@ -16,14 +18,24 @@ export class Module {
   @Column()
   title!: string;
 
+  @Column({ type: 'text', nullable: true })
+  description?: string;
+
   @Column()
   order!: number;
 
-  // Relations
-
-  @ManyToOne(() => Training, (training) => training.modules)
+  @ManyToOne(() => Training, (training) => training.modules, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   training!: Training;
 
   @OneToMany(() => Lesson, (lesson) => lesson.module)
   lessons!: Lesson[];
+
+  @CreateDateColumn()
+  created_at!: Date;
+
+  @UpdateDateColumn()
+  updated_at!: Date;
 }

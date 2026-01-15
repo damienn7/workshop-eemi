@@ -6,9 +6,15 @@ const authService = new AuthService();
 export class AuthController {
   static async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
-      const result = await authService.login(email, password);
-      return res.json(result);
+        const { email, password } = req.body;
+
+        const result = await authService.login(
+            email,
+            password,
+            req.institution
+        );
+
+        return res.json(result);
     } catch (error: any) {
       return res.status(401).json({ message: error.message });
     }

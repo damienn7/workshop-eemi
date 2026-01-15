@@ -19,31 +19,70 @@ export class AuthService {
   /**
    * LOGIN
    */
-  async login(email: string, password: string) {
-    const user = await this.userRepo.findOne({
-      where: { email },
-    });
+async login(
+  email: string,
+  password: string,
+  institution: Institution | null
+) {
+  const user = await this.userRepo.findOne({
+    where: { email },
+    relations: ['institution'],
+  });
 
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-
-    if (user.status !== AccountStatus.ACTIVE) {
-      throw new Error('Account not active');
-    }
-
-    const isValid = await bcrypt.compare(password, user.password_hash);
-    if (!isValid) {
-      throw new Error('Invalid credentials');
-    }
-
-    const token = generateToken({
-      id: user.id,
-      role: user.role,
-    });
-
-    return { token };
+  if (!user) {
+    throw new Error('Invalid credentials');
   }
+
+  /**
+   * 🌍 Domaine racine → plateforme
+   */
+  if (!institution) {
+    if (user.role !== Role.SUPER_ADMIN) {
+      throw new Error(
+        'Please log in via your institution URL'
+      );
+    }
+  }
+
+  /**
+   * 🏫 Sous-domaine → établissement
+   */
+  if (institution) {
+    if (!user.institution || user.institution.id !== institution.id) {
+      throw new Error('Invalid institution context');
+    }
+  }
+
+  if (user.status !== AccountStatus.ACTIVE) {
+    throw new Error('Account not active');
+  }
+
+  const isValid = await bcrypt.compare(
+    password,
+    user.password_hash
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid credentials');
+  }
+
+  const token = generateToken({
+    id: user.id,
+    role: user.role,
+    institutionId: user.institution?.id ?? null,
+  });
+
+  let redirectUrl: string | null = null;
+
+  if (user.role !== Role.SUPER_ADMIN && user.institution) {
+    redirectUrl = `https://${user.institution.slug}.skillogs.io`;
+  }
+
+  return {
+    token,
+    redirectUrl,
+  };
+}
 
   /**
    * REGISTER (creates a pending user + registration request)

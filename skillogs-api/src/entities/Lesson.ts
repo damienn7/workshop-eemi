@@ -13,6 +13,7 @@ import { Media } from './Media';
 
 import { LessonType } from '../enums/LessonType';
 
+@Index(['module', 'slug'], { unique: true })
 @Entity()
 export class Lesson {
   @PrimaryGeneratedColumn()
@@ -42,7 +43,6 @@ export class Lesson {
   @Column({ default: false })
   is_published!: boolean;
 
-  @Index()
   @Column({ nullable: true })
   slug?: string;
 

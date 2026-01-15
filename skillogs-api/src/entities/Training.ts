@@ -15,6 +15,7 @@ import { Institution } from './Institution';
 
 import { TrainingStatus } from '../enums/TrainingStatus';
 
+@Index(['institution', 'slug'], { unique: true })
 @Entity()
 export class Training {
   @PrimaryGeneratedColumn()

@@ -11,6 +11,7 @@ import {
 import { Training } from './Training';
 import { Lesson } from './Lesson';
 
+@Index(['training', 'slug'], { unique: true })
 @Entity()
 export class Module {
   @PrimaryGeneratedColumn()
@@ -25,7 +26,6 @@ export class Module {
   @Column()
   order!: number;
 
-  @Index()
   @Column({ nullable: true })
   slug?: string;
 

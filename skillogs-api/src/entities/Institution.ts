@@ -3,12 +3,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
+  Index
 } from 'typeorm';
 import { User } from './User';
 import { Resource } from './Resource';
 
 import { InstitutionType } from '../enums/InstitutionType';
 
+@Index(['slug'], { unique: true })
 @Entity()
 export class Institution {
   @PrimaryGeneratedColumn()
@@ -23,7 +25,7 @@ export class Institution {
   })
   type!: InstitutionType;
 
-  @Column({ unique: true })
+  @Column()
   slug!: string;
 
   @Column()

@@ -3,6 +3,7 @@ import { Module } from '../entities/Module';
 import { Training } from '../entities/Training';
 import { Institution } from '../entities/Institution';
 import { DeepPartial } from 'typeorm';
+import slugify from 'slugify';
 
 export class ModuleService {
   private moduleRepo = AppDataSource.getRepository(Module);
@@ -29,10 +30,24 @@ export class ModuleService {
       throw new Error('Training not found');
     }
 
+    const baseSlug = slugify(data.title, { lower: true, strict: true });
+    let slug = baseSlug;
+    let index = 1;
+
+    while (await this.moduleRepo.findOne({
+      where: {
+        training: training,
+        slug,
+      },
+    })) {
+      slug = `${baseSlug}-${index++}`;
+    }
+
     const payload: DeepPartial<Module> = {
       title: data.title,
       order: data.order,
       training,
+      slug: slug
     };
 
     if (data.description !== undefined) {

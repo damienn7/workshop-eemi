@@ -48,7 +48,10 @@ export class Lesson {
 
   // Relations
 
-  @ManyToOne(() => Module, (module) => module.lessons)
+  @ManyToOne(() => Module, (module) => module.lessons, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   module!: Module;
 
   @OneToMany(() => Media, (media) => media.lesson)

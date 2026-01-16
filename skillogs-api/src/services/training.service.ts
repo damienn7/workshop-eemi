@@ -4,6 +4,7 @@ import { TrainingStatus } from '../enums/TrainingStatus';
 import { Institution } from '../entities/Institution';
 import { User } from '../entities/User';
 import { DeepPartial } from 'typeorm';
+import slugify from 'slugify';
 
 export class TrainingService {
   private trainingRepo = AppDataSource.getRepository(Training);
@@ -27,12 +28,26 @@ async create(data: {
       throw new Error('Creator not found');
     }
 
+    const baseSlug = slugify(data.title, { lower: true, strict: true });
+    let slug = baseSlug;
+    let index = 1;
+
+    while (await this.trainingRepo.findOne({
+      where: {
+        institution: data.institution,
+        slug,
+      },
+    })) {
+      slug = `${baseSlug}-${index++}`;
+    }
+
     const payload: DeepPartial<Training> = {
       title: data.title,
       description: data.description,
       institution: data.institution,
       creator,
       status: TrainingStatus.DRAFT,
+      slug: slug
     };
 
     if (data.level !== undefined) {
